@@ -1,9 +1,55 @@
-        </main>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جكليته - دردشة فايبربيس</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* استخدام الخطوط وتخصيص شريط التمرير */
+        body { font-family: 'Cairo', 'Inter', sans-serif; overscroll-behavior: contain; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #fecdd3; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #fb7185; }
+        .chat-bubble-sent { border-bottom-right-radius: 0.25rem; }
+        .chat-bubble-received { border-bottom-left-radius: 0.25rem; }
+    </style>
+</head>
+<body class="bg-gray-50">
 
-        <!-- 3. شريط الإرسال --     <footer class="bg-white p-3 border-t border-gray-100 shadow-inner">
+    <div class="flex flex-col h-screen max-w-lg mx-auto bg-white shadow-2xl">
+
+        <header class="flex items-center justify-between p-4 bg-gradient-to-r from-rose-400 to-pink-500 text-white shadow-lg">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-white/30 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold">جكليته</h1>
+                    <p class="text-xs text-white/80">نشط الآن</p>
+                </div>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer">
+                <circle cx="12" cy="12" r="1"></circle>
+                <circle cx="19" cy="12" r="1"></circle>
+                <circle cx="5" cy="12" r="1"></circle>
+            </svg>
+        </header>
+
+        <main id="chat-area" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+            </main>
+
+        <footer class="bg-white p-3 border-t border-gray-100 shadow-inner">
             <div class="flex items-center gap-2">
-                
-                <!-- أيقونة الوظائف (1) -->
                 <button id="functions-btn" class="p-2 text-gray-500 hover:text-pink-500 rounded-full transition-colors duration-200">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-circle">
                         <circle cx="12" cy="12" r="10"></circle>
@@ -11,8 +57,6 @@
                         <line x1="8" y1="12" x2="16" y2="12"></line>
                     </svg>
                 </button>
-                
-                <!-- أيقونة الهدايا (2) -->
                 <button id="gift-btn" class="p-2 text-gray-500 hover:text-pink-500 rounded-full transition-colors duration-200">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gift">
                         <polyline points="20 12 20 22 4 22 4 12"></polyline>
@@ -22,11 +66,7 @@
                         <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
                     </svg>
                 </button>
-
-                <!-- حقل إدخال النص -->
                 <input type="text" id="message-input" placeholder="اكتب رسالتك..." class="flex-1 px-4 py-2.5 bg-gray-100 rounded-full border-transparent focus:outline-none focus:ring-2 focus:ring-pink-300 focus:bg-white transition-all duration-200">
-                
-                <!-- أيقونة الإرسال (3) -->
                 <button id="send-btn" class="p-2.5 bg-pink-500 text-white rounded-full shadow-md hover:bg-pink-600 transition-all duration-200 transform hover:scale-110 active:scale-95">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up">
                         <line x1="12" y1="19" x2="12" y2="5"></line>
@@ -36,13 +76,32 @@
             </div>
         </footer>
 
-        <!-- نافذة منبثقة بسيطة (لإظهار وظائف الأزرار) -->
         <div id="toast-notification" class="hidden absolute bottom-20 right-4 bg-gray-900 text-white text-sm px-4 py-2 rounded-full shadow-lg transition-all duration-300 transform translate-y-2 opacity-0">
             تم الضغط على الزر!
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        // 1. استيراد وظائف Firebase المطلوبة (التطبيق، Firestore)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+        // Your web app's Firebase configuration (مفاتيحك)
+        const firebaseConfig = {
+            apiKey: "AIzaSyB7skwnEpn3oyu5dH5Tp0sjTCk4DKUWp5k",
+            authDomain: "mmnddn-b8def.firebaseapp.com",
+            projectId: "mmnddn-b8def",
+            storageBucket: "mmnddn-b8def.firebasestorage.app",
+            messagingSenderId: "625803051222",
+            appId: "1:625803051222:web:785c87e42948320d974977",
+            measurementId: "G-ZM860ENPX2"
+        };
+
+        // 2. تهيئة Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app); // تهيئة Firestore
+
+        // تعريف العناصر من واجهة المستخدم
         const chatArea = document.getElementById('chat-area');
         const messageInput = document.getElementById('message-input');
         const sendBtn = document.getElementById('send-btn');
@@ -50,7 +109,7 @@
         const giftBtn = document.getElementById('gift-btn');
         const toast = document.getElementById('toast-notification');
 
-        // إظهار إشعار منبثق
+        // وظيفة إظهار إشعار منبثق (من الكود الأصلي)
         function showToast(message) {
             toast.textContent = message;
             toast.classList.remove('hidden', 'opacity-0', 'translate-y-2');
@@ -60,14 +119,14 @@
                 toast.classList.remove('opacity-100', 'translate-y-0');
                 toast.classList.add('opacity-0', 'translate-y-2');
                 setTimeout(() => toast.classList.add('hidden'), 300);
-            }, 2000); // إخفاء بعد ثانيتين
+            }, 2000); 
         }
 
-        // دالة لإضافة رسالة جديدة
-        function addMessage(message, type = 'sent') {
-            if (message.trim() === '') return;
-
-            const messageTime = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+        // 3. دالة إضافة الرسالة إلى الواجهة
+        function addMessageToUI(doc) {
+            const data = doc.data();
+            const messageTime = data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }) : 'الآن';
+            const type = data.user === "User1" ? 'sent' : 'received';
 
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('flex', type === 'sent' ? 'justify-end' : 'justify-start');
@@ -79,29 +138,51 @@
             let bubbleShape = type === 'sent' ? 'chat-bubble-sent' : 'chat-bubble-received';
 
             messageDiv.innerHTML = `
-                <div class="${bubbleColor} p-3 rounded-2xl ${bubbleShape} max-w-[80%]">
-                    <p>${message}</p>
+                <div class="${bubbleColor} p-3 rounded-2xl ${shape} max-w-[80%]">
+                    <p>${data.text}</p>
                     <span class="text-xs ${type === 'sent' ? 'text-white/70' : 'text-gray-400'} mt-1 block text-left">${messageTime}</span>
                 </div>
             `;
             
             chatArea.appendChild(messageDiv);
-            
-            // التمرير للأسفل
             chatArea.scrollTop = chatArea.scrollHeight;
         }
 
-        // إرسال الرسالة
-        function sendMessage() {
-            const message = messageInput.value;
-            addMessage(message, 'sent');
-            messageInput.value = '';
-
-            // محاكاة رد
-            setTimeout(() => {
-                addMessage('رسالة رائعة!', 'received');
-            }, 1500);
+        // 4. دالة إرسال الرسالة الحقيقية إلى Firestore - مع الكود التشخيصي
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message === '') return;
+            
+            console.log("Attempting to send message:", message); // للتحقق من أن الدالة نُفذت
+            
+            try {
+                // إضافة الرسالة إلى مجموعة 'messages' في Firestore
+                await addDoc(collection(db, "messages"), {
+                    text: message,
+                    createdAt: serverTimestamp(), 
+                    user: "User1"
+                });
+                
+                messageInput.value = '';
+                
+            } catch (e) {
+                // الآن سيظهر الخطأ في رسالة منبثقة بالإضافة إلى الكونسول
+                showToast("خطأ في الإرسال! انظر الكونسول."); 
+                console.error("Error adding document: ", e);
+            }
         }
+
+        // 5. الاستماع لرسائل الدردشة في الوقت الفعلي (Real-time Listener)
+        const q = query(collection(db, "messages"), orderBy("createdAt", "asc"));
+
+        onSnapshot(q, (snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === "added") {
+                    addMessageToUI(change.doc);
+                }
+            });
+        });
+
 
         // ربط الأحداث
         sendBtn.addEventListener('click', sendMessage);
@@ -113,18 +194,10 @@
             }
         });
 
-        functionsBtn.addEventListener('click', () => {
-            showToast('تم الضغط على زر الوظائف (+)');
-            // يمكنك هنا إضافة منطق لفتح قائمة بالوظائف
-        });
-
-        giftBtn.addEventListener('click', () => {
-            showToast('تم الضغط على زر الهدايا 🎁');
-            // يمكنك هنا إضافة منطق لإرسال هدية
-        });
+        functionsBtn.addEventListener('click', () => { showToast('تم الضغط على زر الوظائف (+)'); });
+        giftBtn.addEventListener('click', () => { showToast('تم الضغط على زر الهدايا 🎁'); });
 
     </script>
 
 </body>
 </html>
-
