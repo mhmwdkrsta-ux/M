@@ -83,6 +83,7 @@
 
     <script type="module">
         // 1. استيراد وظائف Firebase المطلوبة (التطبيق، Firestore)
+        // (نستخدم الروابط الكاملة لأننا في ملف HTML)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
@@ -138,7 +139,7 @@
             let bubbleShape = type === 'sent' ? 'chat-bubble-sent' : 'chat-bubble-received';
 
             messageDiv.innerHTML = `
-                <div class="${bubbleColor} p-3 rounded-2xl ${shape} max-w-[80%]">
+                <div class="${bubbleColor} p-3 rounded-2xl ${bubbleShape} max-w-[80%]">
                     <p>${data.text}</p>
                     <span class="text-xs ${type === 'sent' ? 'text-white/70' : 'text-gray-400'} mt-1 block text-left">${messageTime}</span>
                 </div>
