@@ -57,53 +57,55 @@
 
     <div class="flex flex-col h-screen max-w-lg mx-auto neumo-card rounded-xl">
 
-        <header class="flex items-center justify-between p-4 neumo-card rounded-t-xl">
-            <div class="flex items-center gap-3">
-                <div id="user-avatar" class="w-10 h-10 rounded-full neumo-input flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
-                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
+        <div id="app-content" style="display:none;" class="flex flex-col flex-1">
+            
+            <header class="flex items-center justify-between p-4 neumo-card rounded-t-xl">
+                <div class="flex items-center gap-3">
+                    <div id="user-avatar" class="w-10 h-10 rounded-full neumo-input flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-white">جكليته الفاخرة</h1>
+                        <p id="current-user-status" class="text-xs text-slate-400">المستخدم الحالي: غير مسجل</p>
+                    </div>
                 </div>
-                <div>
-                    <h1 class="text-xl font-bold text-white">جكليته الفاخرة</h1>
-                    <p id="current-user-status" class="text-xs text-slate-400">المستخدم الحالي: غير مسجل</p>
-                </div>
-            </div>
-            <button id="user-toggle-btn" class="px-3 py-1 neumo-card rounded-full text-sm font-medium hover:scale-105 transition-transform">
-                تبديل
-            </button>
-            <button id="auth-btn" class="p-2 neumo-card rounded-full hover:scale-105 transition-transform">
-                <svg id="auth-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in text-pink-400">
-                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-                    <polyline points="10 17 15 12 10 7"/>
-                    <line x1="15" y1="12" x2="3" y2="12"/>
-                </svg>
-            </button>
-        </header>
-
-        <main id="chat-area" class="flex-1 overflow-y-auto p-4 space-y-4">
-            </main>
-
-        <footer class="p-3 neumo-card rounded-b-xl">
-            <div class="flex items-center gap-2">
-                <button id="functions-btn" class="p-2 text-slate-400 neumo-card rounded-full hover:text-pink-400 transition-colors duration-200 hover:scale-105">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-circle">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" y1="8" x2="12" y2="16"></line>
-                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                <button id="user-toggle-btn" class="px-3 py-1 neumo-card rounded-full text-sm font-medium hover:scale-105 transition-transform">
+                    تبديل
+                </button>
+                <button id="auth-btn" class="p-2 neumo-card rounded-full hover:scale-105 transition-transform">
+                    <svg id="auth-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in text-pink-400">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                        <polyline points="10 17 15 12 10 7"/>
+                        <line x1="15" y1="12" x2="3" y2="12"/>
                     </svg>
                 </button>
-                <input type="text" id="message-input" placeholder="اكتب رسالتك..." class="flex-1 px-4 py-2.5 rounded-full neumo-input placeholder-slate-500 focus:ring-0">
-                <button id="send-btn" class="p-2.5 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 text-white shadow-lg hover:scale-110 active:scale-95 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up">
-                        <line x1="12" y1="19" x2="12" y2="5"></line>
-                        <polyline points="5 12 12 5 19 12"></polyline>
-                    </svg>
-                </button>
-            </div>
-        </footer>
+            </header>
 
+            <main id="chat-area" class="flex-1 overflow-y-auto p-4 space-y-4">
+                </main>
+
+            <footer class="p-3 neumo-card rounded-b-xl">
+                <div class="flex items-center gap-2">
+                    <button id="functions-btn" class="p-2 text-slate-400 neumo-card rounded-full hover:text-pink-400 transition-colors duration-200 hover:scale-105">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-circle">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="16"></line>
+                            <line x1="8" y1="12" x2="16" y2="12"></line>
+                        </svg>
+                    </button>
+                    <input type="text" id="message-input" placeholder="اكتب رسالتك..." class="flex-1 px-4 py-2.5 rounded-full neumo-input placeholder-slate-500 focus:ring-0">
+                    <button id="send-btn" class="p-2.5 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 text-white shadow-lg hover:scale-110 active:scale-95 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up">
+                            <line x1="12" y1="19" x2="12" y2="5"></line>
+                            <polyline points="5 12 12 5 19 12"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </footer>
+        </div>
         <div id="toast-notification" class="hidden absolute bottom-20 right-4 bg-gray-900 text-white text-sm px-4 py-2 rounded-full shadow-lg transition-all duration-300 transform translate-y-2 opacity-0">
             تم!
         </div>
@@ -146,8 +148,8 @@
         // 1. استيراد وظائف Firebase المطلوبة 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
-        // تم تحديث هذا السطر لإضافة وظيفة المصادقة
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"; 
+        // تم تحديث هذا السطر لإضافة وظيفة onAuthStateChanged
+        import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"; 
 
         // Your web app's Firebase configuration (مفاتيحك)
         const firebaseConfig = {
@@ -165,12 +167,13 @@
         const db = getFirestore(app);
         const auth = getAuth(app); 
 
-        // **NEW: متغيرات تحديد المستخدم المؤقتة (سنستبدلها بمعرف المستخدم الحقيقي لاحقاً)**
-        let currentUser = "Mahmoud"; 
-        const USER_VIEWING_APP = "Mahmoud"; 
+        // **NEW: متغير تحديد المستخدم (سيتغير بناءً على المصادقة)**
+        let currentUser = "غير مسجل"; 
+        const USER_VIEWING_APP = "Mahmoud"; // سنبقي هذا ثابتاً حالياً لتمييز الرسائل
 
 
         // تعريف العناصر من واجهة المستخدم
+        const appContent = document.getElementById('app-content'); // المحتوى الرئيسي
         const chatArea = document.getElementById('chat-area');
         const messageInput = document.getElementById('message-input');
         const sendBtn = document.getElementById('send-btn');
@@ -181,7 +184,7 @@
         
         // العناصر الجديدة للمصادقة والواجهة الجديدة
         const authBtn = document.getElementById('auth-btn'); 
-        const authModal = document.getElementById('auth-modal'); // الواجهة المنبثقة
+        const authModal = document.getElementById('auth-modal'); 
         const modalCloseBtn = document.getElementById('modal-close-btn');
         const googleSignInBtn = document.getElementById('google-sign-in-btn');
         const emailSignInBtn = document.getElementById('email-sign-in-btn');
@@ -202,28 +205,75 @@
 
         // دالة فتح الواجهة المنبثقة
         function openModal() {
+            //appContent.style.display = 'none'; // لم نعد بحاجة لهذا السطر هنا، المستمع هو من يقرر
             authModal.classList.remove('hidden');
-            // تأثير تحول بسيط
             setTimeout(() => {
                 document.getElementById('auth-content').classList.remove('scale-95');
             }, 50);
         }
 
-        // دالة إغلاق الواجهة المنبثقة
+        // دالة إغلاق الواجهة المنبثقة (نستخدمها فقط لإغلاق الـ modal يدوياً، المستمع سيفتحها إذا كان المستخدم غير مسجل)
         function closeModal() {
             document.getElementById('auth-content').classList.add('scale-95');
             setTimeout(() => {
                 authModal.classList.add('hidden');
-            }, 300); // يتطابق مع مدة الانتقال
+            }, 300);
         }
         
         // دالة تحديث واجهة المستخدم حسب المستخدم الحالي (للتجربة المؤقتة)
         function updateUIForCurrentUser() {
-            currentUserStatus.textContent = `المستخدم الحالي: ${currentUser}`; 
+            // سيتم تحديث هذا الجزء بالكامل بواسطة المستمع الآن
         }
-        updateUIForCurrentUser();
 
-        // 3. دالة إضافة الرسالة إلى الواجهة
+        // ... (وظيفة addMessageToUI و sendMessage لم تتغير) ...
+
+        // 5. منطق المصادقة 
+        async function handleAuthAction() {
+            // إذا كان مسجل دخول، فنسجل الخروج
+            if (auth.currentUser) {
+                try {
+                    await signOut(auth);
+                    showToast("تم تسجيل الخروج بنجاح.");
+                } catch (error) {
+                    showToast(`فشل تسجيل الخروج: ${error.message}`);
+                }
+            } else {
+                // إذا كان غير مسجل، نفتح الواجهة المنبثقة
+                openModal();
+            }
+        }
+
+        async function handleEmailSignIn() {
+            closeModal(); 
+            
+            // ⚠️ نستخدم prompt مؤقتاً
+            const email = prompt("أدخل بريدك الإلكتروني للتسجيل/الدخول:");
+            if (email === null) return; 
+
+            const password = prompt("أدخل كلمة مرور (6+ أحرف):");
+
+            if (!email || !password) {
+                showToast("تم إلغاء العملية.");
+                return;
+            }
+
+            try {
+                // سنبقيها تسجيل جديد حالياً، ولكن المستمع سيعمل الآن
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                
+                // المستمع onAuthStateChanged سيتكفل بعرض رسالة النجاح وتحديث الواجهة
+            } catch (error) {
+                showToast(`❌ فشل التسجيل: ${error.code}`);
+                console.error("Registration Error:", error.message);
+            }
+        }
+        
+        function handleGoogleSignIn() {
+             closeModal();
+             showToast("الخطوة التالية: سنبرمج الدخول عبر Google. لا يعمل الآن.");
+        }
+
+        // 6. الاستماع لرسائل الدردشة في الوقت الفعلي (نحتاج فقط لنسخ هذه الوظائف من الكود القديم لضمان اكتمال الملف)
         function addMessageToUI(doc) {
             const data = doc.data();
             const messageTime = data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }) : 'الآن';
@@ -233,10 +283,9 @@
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('flex', type === 'sent' ? 'justify-end' : 'justify-start');
             
-            // تم تغيير الألوان لتناسب المظهر الجديد
             let bubbleColor = type === 'sent' 
-                ? 'bg-gradient-to-br from-pink-500 to-purple-600 text-white shadow-md' // رسالة مرسلة
-                : 'chat-bubble-received text-slate-200 shadow-inner'; // رسالة مستلمة
+                ? 'bg-gradient-to-br from-pink-500 to-purple-600 text-white shadow-md'
+                : 'chat-bubble-received text-slate-200 shadow-inner';
             
             let bubbleShape = type === 'sent' ? 'chat-bubble-sent' : 'chat-bubble-received';
 
@@ -251,17 +300,19 @@
             chatArea.scrollTop = chatArea.scrollHeight;
         }
 
-        // 4. دالة إرسال الرسالة الحقيقية إلى Firestore
         async function sendMessage() {
+            if (!auth.currentUser) {
+                showToast("يجب تسجيل الدخول للإرسال!");
+                return;
+            }
             const message = messageInput.value.trim();
             if (message === '') return;
             
             try {
-                // استخدام المتغير currentUser لتحديد المرسل (مؤقتاً)
                 await addDoc(collection(db, "messages"), {
                     text: message,
                     createdAt: serverTimestamp(), 
-                    user: currentUser 
+                    user: auth.currentUser.email // استخدام الإيميل كمعرف حقيقي
                 });
                 
                 messageInput.value = '';
@@ -272,43 +323,6 @@
             }
         }
 
-        // 5. منطق المصادقة - تم تحديثه لفتح الواجهة المنبثقة
-        async function handleAuthAction() {
-            openModal();
-        }
-
-        async function handleEmailSignIn() {
-             // ⚠️ نستخدم prompt مؤقتاً للتسجيل، وسنبدله بواجهة حقيقية لاحقاً
-            closeModal(); 
-            
-            const email = prompt("أدخل بريدك الإلكتروني للتسجيل/الدخول:");
-            if (email === null) return; 
-
-            const password = prompt("أدخل كلمة مرور (6+ أحرف):");
-
-            if (!email || !password) {
-                showToast("تم إلغاء العملية.");
-                return;
-            }
-
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                
-                showToast(`🎉 تم التسجيل بنجاح! المستخدم: ${userCredential.user.email}`);
-                console.log("Registered User:", userCredential.user);
-
-            } catch (error) {
-                showToast(`❌ فشل التسجيل: ${error.code}`);
-                console.error("Registration Error:", error.message);
-            }
-        }
-        
-        function handleGoogleSignIn() {
-             closeModal();
-             showToast("يتم الآن إعداد الدخول عبر Google. انتظر الخطوة التالية!");
-        }
-
-        // 6. الاستماع لرسائل الدردشة في الوقت الفعلي
         const q = query(collection(db, "messages"), orderBy("createdAt", "asc"));
 
         onSnapshot(q, (snapshot) => {
@@ -319,13 +333,50 @@
             });
         });
 
+        // ** 8. الاستماع لحالة المصادقة وتحديث الواجهة (الخطوة الجديدة والأساسية) **
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // 🟢 المستخدم مسجل دخوله
+                currentUser = user.email.split('@')[0]; // اسم المستخدم
+                currentUserStatus.textContent = `المستخدم الحالي: ${user.email}`;
+                
+                // إخفاء الـ Modal وعرض محتوى التطبيق
+                authModal.classList.add('hidden');
+                appContent.style.display = 'flex';
+                
+                // تحديث زر المصادقة إلى 'تسجيل خروج'
+                authBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out text-pink-400">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                        <polyline points="10 17 15 12 10 7"/>
+                        <line x1="15" y1="12" x2="3" y2="12"/>
+                    </svg>
+                `;
 
-        // 7. ربط الأحداث
-        userToggleBtn.addEventListener('click', () => {
-            currentUser = currentUser === "Mahmoud" ? "Fatima" : "Mahmoud";
-            updateUIForCurrentUser();
-            showToast(`تم التبديل إلى: ${currentUser} - (لا يؤثر على المصادقة الفعلية)`);
+            } else {
+                // 🔴 المستخدم غير مسجل دخوله
+                currentUser = "غير مسجل";
+                currentUserStatus.textContent = `المستخدم الحالي: غير مسجل`;
+                
+                // إظهار الـ Modal وإخفاء محتوى التطبيق
+                appContent.style.display = 'none';
+                openModal();
+                
+                // تحديث زر المصادقة إلى 'تسجيل دخول'
+                authBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in text-pink-400">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                        <polyline points="10 17 15 12 10 7"/>
+                        <line x1="15" y1="12" x2="3" y2="12"/>
+                    </svg>
+                `;
+            }
         });
+
+
+        // 9. ربط الأحداث
+        // زر تبديل المستخدم المؤقت لا نحتاجه الآن
+        userToggleBtn.style.display = 'none'; 
 
         sendBtn.addEventListener('click', sendMessage);
         messageInput.addEventListener('keypress', (e) => {
@@ -335,15 +386,15 @@
         });
         
         // ربط أحداث الواجهة المنبثقة
-        authBtn.addEventListener('click', handleAuthAction); // لفتح الواجهة
-        modalCloseBtn.addEventListener('click', closeModal); // لإغلاق الواجهة
-        authModal.addEventListener('click', (e) => { // لإغلاق الواجهة عند النقر خارجها
+        authBtn.addEventListener('click', handleAuthAction); 
+        modalCloseBtn.addEventListener('click', closeModal); 
+        authModal.addEventListener('click', (e) => { 
             if (e.target === authModal) {
                 closeModal();
             }
         });
-        googleSignInBtn.addEventListener('click', handleGoogleSignIn); // زر جوجل (خطوة قادمة)
-        emailSignInBtn.addEventListener('click', handleEmailSignIn); // زر الإيميل
+        googleSignInBtn.addEventListener('click', handleGoogleSignIn); 
+        emailSignInBtn.addEventListener('click', handleEmailSignIn); 
         
     </script>
 
