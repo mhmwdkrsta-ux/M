@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>جكليته - دردشة فايبربيس</title>
+    <title>جكليته - دردشة فايبربيس الفاخرة</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,39 +11,70 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* استخدام الخطوط وتخصيص شريط التمرير */
-        body { font-family: 'Cairo', 'Inter', sans-serif; overscroll-behavior: contain; }
+        /* تعريف الألوان والمظهر النيومورفي */
+        :root {
+            --bg-color: #273041;
+            --main-gradient: linear-gradient(135deg, #FF69B4, #8A2BE2); /* Hot Pink to Blue Violet */
+            --shadow-light: #364052;
+            --shadow-dark: #1f2735;
+        }
+
+        body { 
+            font-family: 'Cairo', 'Inter', sans-serif; 
+            overscroll-behavior: contain; 
+            background-color: var(--bg-color); /* الخلفية الأساسية الداكنة */
+            color: #E2E8F0;
+        }
+
+        /* تخصيص النيومورفية الأساسية (للبطاقات والأزرار البارزة) */
+        .neumo-card {
+            background-color: var(--bg-color);
+            box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+            border: none;
+            transition: all 0.2s ease-in-out;
+        }
+
+        /* تخصيص النيومورفية للحقول (الداخلية/الغائرة) */
+        .neumo-input {
+            background-color: var(--bg-color);
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+            border: none;
+            color: #E2E8F0;
+        }
+
+        /* تخصيص شريط التمرير */
         ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #fecdd3; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #fb7185; }
-        /* تحديد شكل الفقاعات عند الإرسال والاستقبال */
-        .chat-bubble-sent { border-bottom-right-radius: 0.25rem; }
-        .chat-bubble-received { border-bottom-left-radius: 0.25rem; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: #8A2BE2; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #FF69B4; }
+
+        /* فقاعات الدردشة */
+        .chat-bubble-sent { border-bottom-right-radius: 0.25rem; background: var(--main-gradient); }
+        .chat-bubble-received { border-bottom-left-radius: 0.25rem; background-color: #364052; box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light); }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="neumo-body">
 
-    <div class="flex flex-col h-screen max-w-lg mx-auto bg-white shadow-2xl">
+    <div class="flex flex-col h-screen max-w-lg mx-auto neumo-card rounded-xl">
 
-        <header class="flex items-center justify-between p-4 bg-gradient-to-r from-rose-400 to-pink-500 text-white shadow-lg">
+        <header class="flex items-center justify-between p-4 neumo-card rounded-t-xl">
             <div class="flex items-center gap-3">
-                <div id="user-avatar" class="w-10 h-10 rounded-full bg-white/30 flex items-center justify-center">
+                <div id="user-avatar" class="w-10 h-10 rounded-full neumo-input flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
                         <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold">جكليته</h1>
-                    <p id="current-user-status" class="text-xs text-white/80">المستخدم الحالي: غير مسجل</p>
+                    <h1 class="text-xl font-bold text-white">جكليته الفاخرة</h1>
+                    <p id="current-user-status" class="text-xs text-slate-400">المستخدم الحالي: غير مسجل</p>
                 </div>
             </div>
-            <button id="user-toggle-btn" class="px-3 py-1 bg-white/30 rounded-full text-sm font-medium hover:bg-white/50 transition-colors">
-                تبديل المستخدم
+            <button id="user-toggle-btn" class="px-3 py-1 neumo-card rounded-full text-sm font-medium hover:scale-105 transition-transform">
+                تبديل
             </button>
-            <button id="auth-btn" class="p-1.5 rounded-full hover:bg-white/20 transition-colors">
-                <svg id="auth-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in">
+            <button id="auth-btn" class="p-2 neumo-card rounded-full hover:scale-105 transition-transform">
+                <svg id="auth-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in text-pink-400">
                     <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
                     <polyline points="10 17 15 12 10 7"/>
                     <line x1="15" y1="12" x2="3" y2="12"/>
@@ -51,29 +82,20 @@
             </button>
         </header>
 
-        <main id="chat-area" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+        <main id="chat-area" class="flex-1 overflow-y-auto p-4 space-y-4">
             </main>
 
-        <footer class="bg-white p-3 border-t border-gray-100 shadow-inner">
+        <footer class="p-3 neumo-card rounded-b-xl">
             <div class="flex items-center gap-2">
-                <button id="functions-btn" class="p-2 text-gray-500 hover:text-pink-500 rounded-full transition-colors duration-200">
+                <button id="functions-btn" class="p-2 text-slate-400 neumo-card rounded-full hover:text-pink-400 transition-colors duration-200 hover:scale-105">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-circle">
                         <circle cx="12" cy="12" r="10"></circle>
                         <line x1="12" y1="8" x2="12" y2="16"></line>
                         <line x1="8" y1="12" x2="16" y2="12"></line>
                     </svg>
                 </button>
-                <button id="gift-btn" class="p-2 text-gray-500 hover:text-pink-500 rounded-full transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gift">
-                        <polyline points="20 12 20 22 4 22 4 12"></polyline>
-                        <rect x="2" y="7" width="20" height="5"></rect>
-                        <line x1="12" y1="22" x2="12" y2="7"></line>
-                        <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
-                        <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
-                    </svg>
-                </button>
-                <input type="text" id="message-input" placeholder="اكتب رسالتك..." class="flex-1 px-4 py-2.5 bg-gray-100 rounded-full border-transparent focus:outline-none focus:ring-2 focus:ring-pink-300 focus:bg-white transition-all duration-200">
-                <button id="send-btn" class="p-2.5 bg-pink-500 text-white rounded-full shadow-md hover:bg-pink-600 transition-all duration-200 transform hover:scale-110 active:scale-95">
+                <input type="text" id="message-input" placeholder="اكتب رسالتك..." class="flex-1 px-4 py-2.5 rounded-full neumo-input placeholder-slate-500 focus:ring-0">
+                <button id="send-btn" class="p-2.5 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 text-white shadow-lg hover:scale-110 active:scale-95 transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up">
                         <line x1="12" y1="19" x2="12" y2="5"></line>
                         <polyline points="5 12 12 5 19 12"></polyline>
@@ -83,7 +105,40 @@
         </footer>
 
         <div id="toast-notification" class="hidden absolute bottom-20 right-4 bg-gray-900 text-white text-sm px-4 py-2 rounded-full shadow-lg transition-all duration-300 transform translate-y-2 opacity-0">
-            تم الضغط على الزر!
+            تم!
+        </div>
+    </div>
+
+    <div id="auth-modal" class="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center hidden transition-opacity duration-300">
+        <div class="neumo-card p-8 rounded-xl w-11/12 max-w-sm text-center transform transition-transform duration-300 scale-95" id="auth-content">
+            <h2 class="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">انضم إلى جكليته</h2>
+            
+            <p class="text-sm text-slate-400 mb-8">اختر طريقة تسجيل الدخول أو التسجيل:</p>
+
+            <button id="google-sign-in-btn" class="w-full mb-4 py-3 neumo-card rounded-xl text-white font-semibold flex items-center justify-center transition-all hover:scale-[1.02] active:scale-95">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-3" viewBox="0 0 48 48">
+                    <path fill="#4285F4" d="M24 9.5c3.54 0 6.71 1.24 9.17 3.63l5.24-5.06C34.72 5.52 29.7 4 24 4 14.83 4 7 9.8 7 18.5s7.83 14.5 17 14.5c4.77 0 9.07-1.48 12.35-4.04l-4.52-3.32C31.57 28.66 28.16 29.5 24 29.5c-6.18 0-11.23-4.73-11.23-10.5S17.82 8.5 24 8.5z"/>
+                    <path fill="#34A853" d="M43.71 24.38a1.05 1.05 0 0 1 .05.74v.1a1.05 1.05 0 0 1-.05.74L36.85 30l-3.32-2.45c1.8-1.5 2.87-3.73 2.87-6.09s-1.07-4.59-2.87-6.09l3.32-2.45 6.86 5.09z"/>
+                    <path fill="#FBBC04" d="M24 44c5.11 0 9.54-1.85 12.87-5.05L32 35.86c-2.31 2.06-5.46 3.39-8 3.39-6.9 0-12.72-4.63-14.86-11.1H4.6c2.8 5.75 9.4 10.33 19.4 10.33z"/>
+                    <path fill="#EA4335" d="M4.6 24c0-1.89.37-3.7.99-5.35h-3.95c-.44 1.76-.64 3.64-.64 5.35s.2 3.59.64 5.35h3.95c-.62-1.65-.99-3.46-.99-5.35z"/>
+                </svg>
+                
+                <span class="text-slate-200">تسجيل الدخول عبر Google</span>
+            </button>
+            
+            <div class="flex items-center my-4">
+                <div class="flex-grow border-t border-slate-700"></div>
+                <span class="mx-4 text-sm text-slate-500">أو</span>
+                <div class="flex-grow border-t border-slate-700"></div>
+            </div>
+
+            <button id="email-sign-in-btn" class="w-full mb-4 py-3 neumo-card rounded-xl text-white font-semibold transition-all hover:scale-[1.02] active:scale-95 bg-gradient-to-r from-purple-600 to-pink-500">
+                البريد الإلكتروني وكلمة المرور
+            </button>
+
+            <button id="modal-close-btn" class="mt-6 text-sm text-slate-400 hover:text-white transition-colors">
+                إغلاق
+            </button>
         </div>
     </div>
 
@@ -91,7 +146,7 @@
         // 1. استيراد وظائف Firebase المطلوبة 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
-        // تم تحديث هذا السطر لإضافة وظيفة التسجيل
+        // تم تحديث هذا السطر لإضافة وظيفة المصادقة
         import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"; 
 
         // Your web app's Firebase configuration (مفاتيحك)
@@ -108,9 +163,9 @@
         // 2. تهيئة Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const auth = getAuth(app); // تهيئة خدمة المصادقة 
+        const auth = getAuth(app); 
 
-        // **NEW: متغيرات تحديد المستخدم المؤقتة**
+        // **NEW: متغيرات تحديد المستخدم المؤقتة (سنستبدلها بمعرف المستخدم الحقيقي لاحقاً)**
         let currentUser = "Mahmoud"; 
         const USER_VIEWING_APP = "Mahmoud"; 
 
@@ -122,11 +177,14 @@
         const userToggleBtn = document.getElementById('user-toggle-btn');
         const currentUserStatus = document.getElementById('current-user-status');
         const userAvatar = document.getElementById('user-avatar');
-        
-        // العناصر الجديدة للمصادقة 
-        const authBtn = document.getElementById('auth-btn'); 
-        const authIcon = document.getElementById('auth-icon'); 
         const toast = document.getElementById('toast-notification');
+        
+        // العناصر الجديدة للمصادقة والواجهة الجديدة
+        const authBtn = document.getElementById('auth-btn'); 
+        const authModal = document.getElementById('auth-modal'); // الواجهة المنبثقة
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const googleSignInBtn = document.getElementById('google-sign-in-btn');
+        const emailSignInBtn = document.getElementById('email-sign-in-btn');
 
 
         // وظيفة إظهار إشعار منبثق
@@ -139,20 +197,29 @@
                 toast.classList.remove('opacity-100', 'translate-y-0');
                 toast.classList.add('opacity-0', 'translate-y-2');
                 setTimeout(() => toast.classList.add('hidden'), 300);
-            }, 3000); // زيادة الوقت قليلاً لرؤية رسائل الخطأ
+            }, 3000); 
+        }
+
+        // دالة فتح الواجهة المنبثقة
+        function openModal() {
+            authModal.classList.remove('hidden');
+            // تأثير تحول بسيط
+            setTimeout(() => {
+                document.getElementById('auth-content').classList.remove('scale-95');
+            }, 50);
+        }
+
+        // دالة إغلاق الواجهة المنبثقة
+        function closeModal() {
+            document.getElementById('auth-content').classList.add('scale-95');
+            setTimeout(() => {
+                authModal.classList.add('hidden');
+            }, 300); // يتطابق مع مدة الانتقال
         }
         
         // دالة تحديث واجهة المستخدم حسب المستخدم الحالي (للتجربة المؤقتة)
         function updateUIForCurrentUser() {
-            // سنغير هذا الجزء لاحقاً ليعتمد على حالة المصادقة الفعلية
             currentUserStatus.textContent = `المستخدم الحالي: ${currentUser}`; 
-            if (currentUser === "Mahmoud") {
-                userAvatar.classList.remove('bg-blue-400/30');
-                userAvatar.classList.add('bg-white/30');
-            } else {
-                userAvatar.classList.remove('bg-white/30');
-                userAvatar.classList.add('bg-blue-400/30');
-            }
         }
         updateUIForCurrentUser();
 
@@ -166,16 +233,17 @@
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('flex', type === 'sent' ? 'justify-end' : 'justify-start');
             
+            // تم تغيير الألوان لتناسب المظهر الجديد
             let bubbleColor = type === 'sent' 
-                ? 'bg-gradient-to-br from-rose-400 to-pink-500 text-white shadow-md' 
-                : 'bg-white border border-gray-200 text-gray-800 shadow-sm';
+                ? 'bg-gradient-to-br from-pink-500 to-purple-600 text-white shadow-md' // رسالة مرسلة
+                : 'chat-bubble-received text-slate-200 shadow-inner'; // رسالة مستلمة
             
             let bubbleShape = type === 'sent' ? 'chat-bubble-sent' : 'chat-bubble-received';
 
             messageDiv.innerHTML = `
                 <div class="${bubbleColor} p-3 rounded-2xl ${bubbleShape} max-w-[80%]">
                     <p>${data.text}</p>
-                    <span class="text-xs ${type === 'sent' ? 'text-white/70' : 'text-gray-400'} mt-1 block text-left">${messageTime}</span>
+                    <span class="text-xs ${type === 'sent' ? 'text-white/70' : 'text-slate-400'} mt-1 block text-left">${messageTime}</span>
                 </div>
             `;
             
@@ -204,33 +272,40 @@
             }
         }
 
-        // 5. دالة المصادقة (تمت إضافة منطق التسجيل هنا)
+        // 5. منطق المصادقة - تم تحديثه لفتح الواجهة المنبثقة
         async function handleAuthAction() {
-            // ⚠️ تنبيه: نستخدم prompt للتجربة السريعة، سنغيرها لواجهة أفضل لاحقاً
-            const email = prompt("أدخل بريدك الإلكتروني للتسجيل:");
+            openModal();
+        }
+
+        async function handleEmailSignIn() {
+             // ⚠️ نستخدم prompt مؤقتاً للتسجيل، وسنبدله بواجهة حقيقية لاحقاً
+            closeModal(); 
             
-            // تحقق من أن المستخدم لم يقم بالإلغاء قبل طلب كلمة المرور
+            const email = prompt("أدخل بريدك الإلكتروني للتسجيل/الدخول:");
             if (email === null) return; 
 
-            const password = prompt("أدخل كلمة مرور (يجب أن تكون 6 أحرف على الأقل):");
+            const password = prompt("أدخل كلمة مرور (6+ أحرف):");
 
             if (!email || !password) {
-                showToast("تم إلغاء التسجيل أو إدخال بيانات غير كاملة.");
+                showToast("تم إلغاء العملية.");
                 return;
             }
 
             try {
-                // إنشاء مستخدم جديد باستخدام الوظيفة التي ناقشناها
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 
                 showToast(`🎉 تم التسجيل بنجاح! المستخدم: ${userCredential.user.email}`);
                 console.log("Registered User:", userCredential.user);
 
             } catch (error) {
-                // رسائل خطأ شائعة: weak-password, email-already-in-use
                 showToast(`❌ فشل التسجيل: ${error.code}`);
                 console.error("Registration Error:", error.message);
             }
+        }
+        
+        function handleGoogleSignIn() {
+             closeModal();
+             showToast("يتم الآن إعداد الدخول عبر Google. انتظر الخطوة التالية!");
         }
 
         // 6. الاستماع لرسائل الدردشة في الوقت الفعلي
@@ -249,7 +324,7 @@
         userToggleBtn.addEventListener('click', () => {
             currentUser = currentUser === "Mahmoud" ? "Fatima" : "Mahmoud";
             updateUIForCurrentUser();
-            showToast(`تم التبديل إلى: ${currentUser} - رسالتك القادمة ستظهر كرسالة مستلَمة`);
+            showToast(`تم التبديل إلى: ${currentUser} - (لا يؤثر على المصادقة الفعلية)`);
         });
 
         sendBtn.addEventListener('click', sendMessage);
@@ -259,8 +334,16 @@
             }
         });
         
-        // ربط الزر الجديد بدالته
-        authBtn.addEventListener('click', handleAuthAction);
+        // ربط أحداث الواجهة المنبثقة
+        authBtn.addEventListener('click', handleAuthAction); // لفتح الواجهة
+        modalCloseBtn.addEventListener('click', closeModal); // لإغلاق الواجهة
+        authModal.addEventListener('click', (e) => { // لإغلاق الواجهة عند النقر خارجها
+            if (e.target === authModal) {
+                closeModal();
+            }
+        });
+        googleSignInBtn.addEventListener('click', handleGoogleSignIn); // زر جوجل (خطوة قادمة)
+        emailSignInBtn.addEventListener('click', handleEmailSignIn); // زر الإيميل
         
     </script>
 
