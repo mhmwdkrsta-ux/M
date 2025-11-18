@@ -42,6 +42,13 @@
             <button id="user-toggle-btn" class="px-3 py-1 bg-white/30 rounded-full text-sm font-medium hover:bg-white/50 transition-colors">
                 تبديل المستخدم
             </button>
+            <button id="auth-btn" class="p-1.5 rounded-full hover:bg-white/20 transition-colors">
+                <svg id="auth-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                    <polyline points="10 17 15 12 10 7"/>
+                    <line x1="15" y1="12" x2="3" y2="12"/>
+                </svg>
+            </button>
         </header>
 
         <main id="chat-area" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
@@ -84,6 +91,7 @@
         // 1. استيراد وظائف Firebase المطلوبة 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"; // جديد
 
         // Your web app's Firebase configuration (مفاتيحك)
         const firebaseConfig = {
@@ -99,6 +107,7 @@
         // 2. تهيئة Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const auth = getAuth(app); // تهيئة خدمة المصادقة الجديدة
 
         // **NEW: متغيرات تحديد المستخدم المؤقتة**
         let currentUser = "Mahmoud"; // معرف المستخدم الحالي
@@ -109,15 +118,18 @@
         const chatArea = document.getElementById('chat-area');
         const messageInput = document.getElementById('message-input');
         const sendBtn = document.getElementById('send-btn');
-        const userToggleBtn = document.getElementById('user-toggle-btn'); // الزر الجديد
-        const currentUserStatus = document.getElementById('current-user-status'); // شريط الحالة
-        const userAvatar = document.getElementById('user-avatar'); // الأفاتار
+        const userToggleBtn = document.getElementById('user-toggle-btn');
+        const currentUserStatus = document.getElementById('current-user-status');
+        const userAvatar = document.getElementById('user-avatar');
+        
+        // العناصر الجديدة للمصادقة 
+        const authBtn = document.getElementById('auth-btn'); // زر المصادقة 
+        const authIcon = document.getElementById('auth-icon'); // أيقونة الزر
 
-        // ... بقية الأزرار ...
 
         // وظيفة إظهار إشعار منبثق
         function showToast(message) {
-            // ... (كود showToast كما هو)
+            const toast = document.getElementById('toast-notification');
             toast.textContent = message;
             toast.classList.remove('hidden', 'opacity-0', 'translate-y-2');
             toast.classList.add('opacity-100', 'translate-y-0');
@@ -129,7 +141,7 @@
             }, 2000); 
         }
         
-        // **NEW: دالة تحديث واجهة المستخدم حسب المستخدم الحالي**
+        // دالة تحديث واجهة المستخدم حسب المستخدم الحالي (للتجربة المؤقتة)
         function updateUIForCurrentUser() {
             currentUserStatus.textContent = `المستخدم الحالي: ${currentUser}`;
             if (currentUser === "Mahmoud") {
@@ -147,13 +159,11 @@
             const data = doc.data();
             const messageTime = data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }) : 'الآن';
             
-            // التحديث الأساسي: الرسالة تُعتبر 'sent' فقط إذا كان معرف المستخدم هو نفس معرف المستخدم الذي يعرض الشاشة (USER_VIEWING_APP)
             const type = data.user === USER_VIEWING_APP ? 'sent' : 'received';
 
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('flex', type === 'sent' ? 'justify-end' : 'justify-start');
             
-            // تعيين الألوان بناءً على نوع الرسالة
             let bubbleColor = type === 'sent' 
                 ? 'bg-gradient-to-br from-rose-400 to-pink-500 text-white shadow-md' 
                 : 'bg-white border border-gray-200 text-gray-800 shadow-sm';
@@ -176,14 +186,12 @@
             const message = messageInput.value.trim();
             if (message === '') return;
             
-            console.log("Attempting to send message:", message);
-            
             try {
-                // التحديث الأساسي: استخدام المتغير currentUser لتحديد المرسل
+                // استخدام المتغير currentUser لتحديد المرسل (مؤقتاً)
                 await addDoc(collection(db, "messages"), {
                     text: message,
                     createdAt: serverTimestamp(), 
-                    user: currentUser // <-- تم التغيير من "User1" إلى المتغير
+                    user: currentUser 
                 });
                 
                 messageInput.value = '';
@@ -194,7 +202,13 @@
             }
         }
 
-        // 5. الاستماع لرسائل الدردشة في الوقت الفعلي
+        // 5. دالة المصادقة (سنكتبها هنا في الخطوة التالية)
+        function handleAuthAction() {
+            // هنا سنضيف منطق تسجيل الدخول أو تسجيل الخروج
+            showToast("تم الضغط على زر المصادقة. لنبدأ بتسجيل الدخول!");
+        }
+
+        // 6. الاستماع لرسائل الدردشة في الوقت الفعلي
         const q = query(collection(db, "messages"), orderBy("createdAt", "asc"));
 
         onSnapshot(q, (snapshot) => {
@@ -206,22 +220,22 @@
         });
 
 
-        // **NEW: ربط زر تبديل المستخدم**
+        // 7. ربط الأحداث
         userToggleBtn.addEventListener('click', () => {
-            // التبديل بين معرفين مؤقتين
             currentUser = currentUser === "Mahmoud" ? "Fatima" : "Mahmoud";
             updateUIForCurrentUser();
             showToast(`تم التبديل إلى: ${currentUser} - رسالتك القادمة ستظهر كرسالة مستلَمة`);
         });
 
-        // ربط الأحداث الأخرى
         sendBtn.addEventListener('click', sendMessage);
         messageInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 sendMessage();
             }
         });
-        // ... (بقيه ربط الأحداث)
+        
+        // ربط الزر الجديد بدالته
+        authBtn.addEventListener('click', handleAuthAction);
         
     </script>
 
