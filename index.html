@@ -17,6 +17,7 @@
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #fecdd3; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #fb7185; }
+        /* تحديد شكل الفقاعات عند الإرسال والاستقبال */
         .chat-bubble-sent { border-bottom-right-radius: 0.25rem; }
         .chat-bubble-received { border-bottom-left-radius: 0.25rem; }
     </style>
@@ -27,7 +28,7 @@
 
         <header class="flex items-center justify-between p-4 bg-gradient-to-r from-rose-400 to-pink-500 text-white shadow-lg">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-white/30 flex items-center justify-center">
+                <div id="user-avatar" class="w-10 h-10 rounded-full bg-white/30 flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
                         <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
@@ -35,14 +36,12 @@
                 </div>
                 <div>
                     <h1 class="text-xl font-bold">جكليته</h1>
-                    <p class="text-xs text-white/80">نشط الآن</p>
+                    <p id="current-user-status" class="text-xs text-white/80">المستخدم الحالي: محمود</p>
                 </div>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer">
-                <circle cx="12" cy="12" r="1"></circle>
-                <circle cx="19" cy="12" r="1"></circle>
-                <circle cx="5" cy="12" r="1"></circle>
-            </svg>
+            <button id="user-toggle-btn" class="px-3 py-1 bg-white/30 rounded-full text-sm font-medium hover:bg-white/50 transition-colors">
+                تبديل المستخدم
+            </button>
         </header>
 
         <main id="chat-area" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
@@ -82,8 +81,7 @@
     </div>
 
     <script type="module">
-        // 1. استيراد وظائف Firebase المطلوبة (التطبيق، Firestore)
-        // (نستخدم الروابط الكاملة لأننا في ملف HTML)
+        // 1. استيراد وظائف Firebase المطلوبة 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
@@ -100,18 +98,26 @@
 
         // 2. تهيئة Firebase
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app); // تهيئة Firestore
+        const db = getFirestore(app);
+
+        // **NEW: متغيرات تحديد المستخدم المؤقتة**
+        let currentUser = "Mahmoud"; // معرف المستخدم الحالي
+        const USER_VIEWING_APP = "Mahmoud"; // نعتبر هذا هو معرف المستخدم الذي يفتح التطبيق للعرض (مؤقتاً)
+
 
         // تعريف العناصر من واجهة المستخدم
         const chatArea = document.getElementById('chat-area');
         const messageInput = document.getElementById('message-input');
         const sendBtn = document.getElementById('send-btn');
-        const functionsBtn = document.getElementById('functions-btn');
-        const giftBtn = document.getElementById('gift-btn');
-        const toast = document.getElementById('toast-notification');
+        const userToggleBtn = document.getElementById('user-toggle-btn'); // الزر الجديد
+        const currentUserStatus = document.getElementById('current-user-status'); // شريط الحالة
+        const userAvatar = document.getElementById('user-avatar'); // الأفاتار
 
-        // وظيفة إظهار إشعار منبثق (من الكود الأصلي)
+        // ... بقية الأزرار ...
+
+        // وظيفة إظهار إشعار منبثق
         function showToast(message) {
+            // ... (كود showToast كما هو)
             toast.textContent = message;
             toast.classList.remove('hidden', 'opacity-0', 'translate-y-2');
             toast.classList.add('opacity-100', 'translate-y-0');
@@ -122,16 +128,32 @@
                 setTimeout(() => toast.classList.add('hidden'), 300);
             }, 2000); 
         }
+        
+        // **NEW: دالة تحديث واجهة المستخدم حسب المستخدم الحالي**
+        function updateUIForCurrentUser() {
+            currentUserStatus.textContent = `المستخدم الحالي: ${currentUser}`;
+            if (currentUser === "Mahmoud") {
+                userAvatar.classList.remove('bg-blue-400/30');
+                userAvatar.classList.add('bg-white/30');
+            } else {
+                userAvatar.classList.remove('bg-white/30');
+                userAvatar.classList.add('bg-blue-400/30');
+            }
+        }
+        updateUIForCurrentUser();
 
         // 3. دالة إضافة الرسالة إلى الواجهة
         function addMessageToUI(doc) {
             const data = doc.data();
             const messageTime = data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }) : 'الآن';
-            const type = data.user === "User1" ? 'sent' : 'received';
+            
+            // التحديث الأساسي: الرسالة تُعتبر 'sent' فقط إذا كان معرف المستخدم هو نفس معرف المستخدم الذي يعرض الشاشة (USER_VIEWING_APP)
+            const type = data.user === USER_VIEWING_APP ? 'sent' : 'received';
 
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('flex', type === 'sent' ? 'justify-end' : 'justify-start');
             
+            // تعيين الألوان بناءً على نوع الرسالة
             let bubbleColor = type === 'sent' 
                 ? 'bg-gradient-to-br from-rose-400 to-pink-500 text-white shadow-md' 
                 : 'bg-white border border-gray-200 text-gray-800 shadow-sm';
@@ -149,31 +171,30 @@
             chatArea.scrollTop = chatArea.scrollHeight;
         }
 
-        // 4. دالة إرسال الرسالة الحقيقية إلى Firestore - مع الكود التشخيصي
+        // 4. دالة إرسال الرسالة الحقيقية إلى Firestore
         async function sendMessage() {
             const message = messageInput.value.trim();
             if (message === '') return;
             
-            console.log("Attempting to send message:", message); // للتحقق من أن الدالة نُفذت
+            console.log("Attempting to send message:", message);
             
             try {
-                // إضافة الرسالة إلى مجموعة 'messages' في Firestore
+                // التحديث الأساسي: استخدام المتغير currentUser لتحديد المرسل
                 await addDoc(collection(db, "messages"), {
                     text: message,
                     createdAt: serverTimestamp(), 
-                    user: "User1"
+                    user: currentUser // <-- تم التغيير من "User1" إلى المتغير
                 });
                 
                 messageInput.value = '';
                 
             } catch (e) {
-                // الآن سيظهر الخطأ في رسالة منبثقة بالإضافة إلى الكونسول
                 showToast("خطأ في الإرسال! انظر الكونسول."); 
                 console.error("Error adding document: ", e);
             }
         }
 
-        // 5. الاستماع لرسائل الدردشة في الوقت الفعلي (Real-time Listener)
+        // 5. الاستماع لرسائل الدردشة في الوقت الفعلي
         const q = query(collection(db, "messages"), orderBy("createdAt", "asc"));
 
         onSnapshot(q, (snapshot) => {
@@ -185,19 +206,23 @@
         });
 
 
-        // ربط الأحداث
+        // **NEW: ربط زر تبديل المستخدم**
+        userToggleBtn.addEventListener('click', () => {
+            // التبديل بين معرفين مؤقتين
+            currentUser = currentUser === "Mahmoud" ? "Fatima" : "Mahmoud";
+            updateUIForCurrentUser();
+            showToast(`تم التبديل إلى: ${currentUser} - رسالتك القادمة ستظهر كرسالة مستلَمة`);
+        });
+
+        // ربط الأحداث الأخرى
         sendBtn.addEventListener('click', sendMessage);
-        
-        // السماح بالإرسال عبر الضغط على Enter
         messageInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 sendMessage();
             }
         });
-
-        functionsBtn.addEventListener('click', () => { showToast('تم الضغط على زر الوظائف (+)'); });
-        giftBtn.addEventListener('click', () => { showToast('تم الضغط على زر الهدايا 🎁'); });
-
+        // ... (بقيه ربط الأحداث)
+        
     </script>
 
 </body>
