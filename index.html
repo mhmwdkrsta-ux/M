@@ -36,7 +36,7 @@
                 </div>
                 <div>
                     <h1 class="text-xl font-bold">جكليته</h1>
-                    <p id="current-user-status" class="text-xs text-white/80">المستخدم الحالي: محمود</p>
+                    <p id="current-user-status" class="text-xs text-white/80">المستخدم الحالي: غير مسجل</p>
                 </div>
             </div>
             <button id="user-toggle-btn" class="px-3 py-1 bg-white/30 rounded-full text-sm font-medium hover:bg-white/50 transition-colors">
@@ -91,7 +91,8 @@
         // 1. استيراد وظائف Firebase المطلوبة 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
-        import { getAuth } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"; // جديد
+        // تم تحديث هذا السطر لإضافة وظيفة التسجيل
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"; 
 
         // Your web app's Firebase configuration (مفاتيحك)
         const firebaseConfig = {
@@ -107,11 +108,11 @@
         // 2. تهيئة Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const auth = getAuth(app); // تهيئة خدمة المصادقة الجديدة
+        const auth = getAuth(app); // تهيئة خدمة المصادقة 
 
         // **NEW: متغيرات تحديد المستخدم المؤقتة**
-        let currentUser = "Mahmoud"; // معرف المستخدم الحالي
-        const USER_VIEWING_APP = "Mahmoud"; // نعتبر هذا هو معرف المستخدم الذي يفتح التطبيق للعرض (مؤقتاً)
+        let currentUser = "Mahmoud"; 
+        const USER_VIEWING_APP = "Mahmoud"; 
 
 
         // تعريف العناصر من واجهة المستخدم
@@ -123,13 +124,13 @@
         const userAvatar = document.getElementById('user-avatar');
         
         // العناصر الجديدة للمصادقة 
-        const authBtn = document.getElementById('auth-btn'); // زر المصادقة 
-        const authIcon = document.getElementById('auth-icon'); // أيقونة الزر
+        const authBtn = document.getElementById('auth-btn'); 
+        const authIcon = document.getElementById('auth-icon'); 
+        const toast = document.getElementById('toast-notification');
 
 
         // وظيفة إظهار إشعار منبثق
         function showToast(message) {
-            const toast = document.getElementById('toast-notification');
             toast.textContent = message;
             toast.classList.remove('hidden', 'opacity-0', 'translate-y-2');
             toast.classList.add('opacity-100', 'translate-y-0');
@@ -138,12 +139,13 @@
                 toast.classList.remove('opacity-100', 'translate-y-0');
                 toast.classList.add('opacity-0', 'translate-y-2');
                 setTimeout(() => toast.classList.add('hidden'), 300);
-            }, 2000); 
+            }, 3000); // زيادة الوقت قليلاً لرؤية رسائل الخطأ
         }
         
         // دالة تحديث واجهة المستخدم حسب المستخدم الحالي (للتجربة المؤقتة)
         function updateUIForCurrentUser() {
-            currentUserStatus.textContent = `المستخدم الحالي: ${currentUser}`;
+            // سنغير هذا الجزء لاحقاً ليعتمد على حالة المصادقة الفعلية
+            currentUserStatus.textContent = `المستخدم الحالي: ${currentUser}`; 
             if (currentUser === "Mahmoud") {
                 userAvatar.classList.remove('bg-blue-400/30');
                 userAvatar.classList.add('bg-white/30');
@@ -202,10 +204,33 @@
             }
         }
 
-        // 5. دالة المصادقة (سنكتبها هنا في الخطوة التالية)
-        function handleAuthAction() {
-            // هنا سنضيف منطق تسجيل الدخول أو تسجيل الخروج
-            showToast("تم الضغط على زر المصادقة. لنبدأ بتسجيل الدخول!");
+        // 5. دالة المصادقة (تمت إضافة منطق التسجيل هنا)
+        async function handleAuthAction() {
+            // ⚠️ تنبيه: نستخدم prompt للتجربة السريعة، سنغيرها لواجهة أفضل لاحقاً
+            const email = prompt("أدخل بريدك الإلكتروني للتسجيل:");
+            
+            // تحقق من أن المستخدم لم يقم بالإلغاء قبل طلب كلمة المرور
+            if (email === null) return; 
+
+            const password = prompt("أدخل كلمة مرور (يجب أن تكون 6 أحرف على الأقل):");
+
+            if (!email || !password) {
+                showToast("تم إلغاء التسجيل أو إدخال بيانات غير كاملة.");
+                return;
+            }
+
+            try {
+                // إنشاء مستخدم جديد باستخدام الوظيفة التي ناقشناها
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                
+                showToast(`🎉 تم التسجيل بنجاح! المستخدم: ${userCredential.user.email}`);
+                console.log("Registered User:", userCredential.user);
+
+            } catch (error) {
+                // رسائل خطأ شائعة: weak-password, email-already-in-use
+                showToast(`❌ فشل التسجيل: ${error.code}`);
+                console.error("Registration Error:", error.message);
+            }
         }
 
         // 6. الاستماع لرسائل الدردشة في الوقت الفعلي
